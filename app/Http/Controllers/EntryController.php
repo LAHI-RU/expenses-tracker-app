@@ -25,18 +25,31 @@ class EntryController extends Controller
             'description' => 'required|string|max:255',
             'notes' => 'nullable|string',
         ]);
-        // Basic duplicate check
+
+        // If project_id is null, assign default General project
+        if (empty($validated['project_id'])) {
+            $general = Project::firstOrCreate(
+                ['user_id' => Auth::id(), 'name' => 'General']
+            );
+            $validated['project_id'] = $general->id;
+        }
+
+        // Duplicate check
         $duplicate = Auth::user()->entries()
             ->where('description', $request->description)
             ->where('amount', $request->amount)
             ->where('date', '>', now()->subDays(14))
             ->exists();
+
         if ($duplicate) {
             return back()->withErrors(['description' => 'Possible duplicate entry in last 2 weeks!'])->withInput();
         }
+
         Auth::user()->entries()->create($validated);
+
         return redirect()->route('entries.index')->with('message', 'Entry added successfully!');
     }
+
     public function index(Request $request)
     {
         $projects = Auth::user()->projects()->get();

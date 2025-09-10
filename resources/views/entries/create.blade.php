@@ -11,11 +11,21 @@
             <input name="date" type="date" class="border p-2 rounded @error('date') border-red-500 @enderror" value="{{ old('date', now()->format('Y-m-d')) }}">
             @error('date') <p class="text-red-500">{{ $message }}</p> @enderror
             <select name="project_id" class="border p-2 rounded @error('project_id') border-red-500 @enderror">
-                <option value="">General</option>
+                @php
+                    $general = $projects->firstWhere('name', 'General');
+                @endphp
+                <option value="{{ $general ? $general->id : '' }}" {{ old('project_id') == ($general->id ?? '') ? 'selected' : '' }}>
+                    General
+                </option>
                 @foreach($projects as $project)
-                    <option value="{{ $project->id }}" {{ old('project_id') == $project->id ? 'selected' : '' }}>{{ $project->name }}</option>
+                    @if(!$general || $project->id !== $general->id)
+                        <option value="{{ $project->id }}" {{ old('project_id') == $project->id ? 'selected' : '' }}>
+                            {{ $project->name }}
+                        </option>
+                    @endif
                 @endforeach
             </select>
+
             @error('project_id') <p class="text-red-500">{{ $message }}</p> @enderror
             <select name="type" class="border p-2 rounded @error('type') border-red-500 @enderror">
                 <option value="expense" {{ old('type', 'expense') == 'expense' ? 'selected' : '' }}>Expense</option>
