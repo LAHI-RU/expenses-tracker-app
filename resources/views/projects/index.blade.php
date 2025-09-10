@@ -19,23 +19,31 @@
         </div>
         <button type="submit" class="bg-blue-500 text-white px-4 py-2 mt-4 rounded">Create Project</button>
     </form>
-    <table class="w-full table-auto border">
-        <thead>
-            <tr><th>Name</th><th>Start</th><th>End</th><th>Description</th></tr>
+    <div class="overflow-x-auto">
+    <table class="min-w-full bg-white border border-gray-200 rounded-xl shadow-lg">
+        <thead class="bg-gradient-to-r from-purple-100 to-purple-200">
+            <tr>
+                <th class="px-6 py-3 border-b text-left text-xs font-semibold text-gray-700 uppercase">Name</th>
+                <th class="px-6 py-3 border-b text-left text-xs font-semibold text-gray-700 uppercase">Start Date</th>
+                <th class="px-6 py-3 border-b text-left text-xs font-semibold text-gray-700 uppercase">End Date</th>
+                <th class="px-6 py-3 border-b text-left text-xs font-semibold text-gray-700 uppercase">Description</th>
+            </tr>
         </thead>
         <tbody>
-            @foreach($projects as $project)
-                <tr>
-                    <td>{{ $project->name }}</td>
-                    <td>{{ $project->start_date ?? 'N/A' }}</td>
-                    <td>{{ $project->end_date ?? 'N/A' }}</td>
-                    <td>{{ $project->description ?? 'N/A' }}</td>
+            @forelse($projects as $project)
+                <tr class="even:bg-gray-50 odd:bg-white hover:bg-purple-50 transition">
+                    <td class="px-6 py-3 border-b">{{ $project->name }}</td>
+                    <td class="px-6 py-3 border-b">{{ $project->start_date ?? 'N/A' }}</td>
+                    <td class="px-6 py-3 border-b">{{ $project->end_date ?? 'N/A' }}</td>
+                    <td class="px-6 py-3 border-b">{{ $project->description ?? 'N/A' }}</td>
                 </tr>
-            @endforeach
+            @empty
+                <tr>
+                    <td colspan="4" class="px-6 py-3 text-center text-gray-500">No projects found. Add one above!</td>
+                </tr>
+            @endforelse
         </tbody>
     </table>
-    @if($projects->isEmpty())
-        <p class="text-gray-500 mt-4">No projects found. Add one above!</p>
-    @endif
+    </div>
 </div>
 @endsection

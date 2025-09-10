@@ -8,23 +8,31 @@
         <div class="bg-blue-100 p-4 rounded shadow">Profit: ${{ $profit }}</div>
     </div>
     <h2 class="text-2xl font-semibold mb-2">Recent Entries</h2>
-    <table class="w-full table-auto border">
-        <thead>
-            <tr><th>Date</th><th>Type</th><th>Amount</th><th>Project</th></tr>
+    <div class="overflow-x-auto">
+    <table class="min-w-full bg-white border border-gray-200 rounded-xl shadow-lg">
+        <thead class="bg-gradient-to-r from-blue-100 to-blue-200">
+            <tr>
+                <th class="px-6 py-3 border-b text-left text-xs font-semibold text-gray-700 uppercase">Date</th>
+                <th class="px-6 py-3 border-b text-left text-xs font-semibold text-gray-700 uppercase">Type</th>
+                <th class="px-6 py-3 border-b text-left text-xs font-semibold text-gray-700 uppercase">Amount</th>
+                <th class="px-6 py-3 border-b text-left text-xs font-semibold text-gray-700 uppercase">Project</th>
+            </tr>
         </thead>
         <tbody>
-            @foreach($entries as $entry)
-                <tr>
-                    <td>{{ $entry->date }}</td>
-                    <td>{{ ucfirst($entry->type) }}</td>
-                    <td>${{ $entry->amount }}</td>
-                    <td>{{ $entry->project->name ?? 'General' }}</td>
+            @forelse($entries as $entry)
+                <tr class="even:bg-gray-50 odd:bg-white hover:bg-blue-50 transition">
+                    <td class="px-6 py-3 border-b">{{ $entry->date }}</td>
+                    <td class="px-6 py-3 border-b">{{ ucfirst($entry->type) }}</td>
+                    <td class="px-6 py-3 border-b font-semibold text-green-700">${{ number_format($entry->amount, 2) }}</td>
+                    <td class="px-6 py-3 border-b">{{ $entry->project->name ?? 'General' }}</td>
                 </tr>
-            @endforeach
+            @empty
+                <tr>
+                    <td colspan="4" class="px-6 py-3 text-center text-gray-500">No recent entries.</td>
+                </tr>
+            @endforelse
         </tbody>
     </table>
-    @if($entries->isEmpty())
-        <p class="text-gray-500 mt-4">No recent entries.</p>
-    @endif
+    </div>
 </div>
 @endsection
