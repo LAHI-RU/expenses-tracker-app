@@ -26,8 +26,12 @@
             <!-- Page Heading -->
             @if (isset($header))
                 <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
+                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex items-center">
+                        <x-application-logo class="block h-10 w-auto" />
+                        <img src="{{ asset('logo.svg') }}" alt="FireLedger Pro" class="h-10 ml-2">
+                        <div class="ml-4">
+                            {{ $header }}
+                        </div>
                     </div>
                 </header>
             @endif
