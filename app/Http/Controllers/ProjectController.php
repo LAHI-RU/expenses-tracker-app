@@ -13,6 +13,7 @@ class ProjectController extends Controller
         $projects = Auth::user()->projects()->get();
         return view('projects.index', compact('projects'));
     }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
